@@ -1,0 +1,48 @@
+[package]
+name = "ckb-txpool-fuzzer"
+version = "0.1.0-alpha.0"
+authors = ["Boyu Yang <yangby@cryptape.com>"]
+edition = "2021"
+license = "MIT"
+description = "A tool to submit random data to CKB transactions pool."
+homepage = "https://github.com/yangby-cryptape/ckb-txpool-fuzzer"
+repository = "https://github.com/yangby-cryptape/ckb-txpool-fuzzer"
+
+[dependencies]
+ckb-tx-pool             = { path = "deps/ckb/tx-pool",               version = "= 0.102.0-pre", features = ["with_mocked_components"] }
+ckb-verification        = { path = "deps/ckb/verification",          version = "= 0.102.0-pre", features = ["mock"] }
+ckb-script              = { path = "deps/ckb/script",                version = "= 0.102.0-pre", features = ["mock"] }
+ckb-verification-traits = { path = "deps/ckb/verification/traits",   version = "= 0.102.0-pre" }
+ckb-chain-spec          = { path = "deps/ckb/spec",                  version = "= 0.102.0-pre" }
+ckb-resource            = { path = "deps/ckb/resource",              version = "= 0.102.0-pre" }
+ckb-pow                 = { path = "deps/ckb/pow",                   version = "= 0.102.0-pre" }
+ckb-store               = { path = "deps/ckb/store",                 version = "= 0.102.0-pre" }
+ckb-db                  = { path = "deps/ckb/db",                    version = "= 0.102.0-pre" }
+ckb-db-schema           = { path = "deps/ckb/db-schema",             version = "= 0.102.0-pre" }
+ckb-network             = { path = "deps/ckb/network",               version = "= 0.102.0-pre" }
+ckb-crypto              = { path = "deps/ckb/util/crypto",           version = "= 0.102.0-pre" }
+ckb-types               = { path = "deps/ckb/util/types",            version = "= 0.102.0-pre" }
+ckb-dao-utils           = { path = "deps/ckb/util/dao/utils",        version = "= 0.102.0-pre" }
+ckb-proposal-table      = { path = "deps/ckb/util/proposal-table",   version = "= 0.102.0-pre" }
+ckb-snapshot            = { path = "deps/ckb/util/snapshot",         version = "= 0.102.0-pre" }
+ckb-channel             = { path = "deps/ckb/util/channel",          version = "= 0.102.0-pre" }
+ckb-stop-handler        = { path = "deps/ckb/util/stop-handler",     version = "= 0.102.0-pre" }
+ckb-async-runtime       = { path = "deps/ckb/util/runtime",          version = "= 0.102.0-pre" }
+ckb-app-config          = { path = "deps/ckb/util/app-config",       version = "= 0.102.0-pre" }
+ckb-test-chain-utils    = { path = "deps/ckb/util/test-chain-utils", version = "= 0.102.0-pre" }
+ckb-system-scripts = { version = "= 0.5.4"  }
+rocksdb = { package = "ckb-rocksdb", version ="=0.16.1", features = ["snappy"] }
+anyhow = "1.0.51"
+thiserror = "1.0.30"
+log = "0.4.14"
+env_logger = "0.9.0"
+clap = { version = "2.34.0", features = ["yaml"]  }
+rand = "0.8.4"
+rand_distr = "0.4.2"
+faketime = "0.2.1"
+serde = { version = "1.0.131", features = ["derive"] }
+serde_yaml = "0.8.23"
+path-clean = "0.1.0"
+tempfile = "3.1.0"
+indexmap = "1.8.0"
+ctrlc = { version = "3.2.1", features = ["termination"] }

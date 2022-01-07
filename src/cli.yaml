@@ -1,0 +1,30 @@
+name: CKB Transactions Pool Fuzzer
+settings:
+  - SubcommandRequired
+subcommands:
+  - init:
+      about: Initialize the data directory.
+      args:
+        - data-dir:
+            help: The directory where to store the data.
+            long: data-dir
+            takes_value: true
+            required: true
+        - config-file:
+            help: The config file which includes the initialization parameters.
+            long: config-file
+            takes_value: true
+            required: true
+  - run:
+      about: Submit random data to CKB transactions pool.
+      args:
+        - data-dir:
+            help: The directory where to store the data.
+            long: data-dir
+            takes_value: true
+            required: true
+        - config-file:
+            help: The config file which includes the running parameters.
+            long: config-file
+            takes_value: true
+            required: true

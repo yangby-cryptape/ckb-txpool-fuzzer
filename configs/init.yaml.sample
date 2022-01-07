@@ -1,0 +1,16 @@
+# The chain spec parameters.
+chain_spec:
+  genesis:
+    timestamp: 1573852190812
+    compact_target: 0x20010000
+  params:
+    cellbase_maturity: 0
+    permanent_difficulty_in_dummy: true
+    hardfork:
+      rfc_0028: 0
+      rfc_0029: 0
+      rfc_0030: 0
+      rfc_0031: 0
+      rfc_0032: 0
+      rfc_0036: 0
+      rfc_0038: 0
