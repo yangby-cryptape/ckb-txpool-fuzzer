@@ -1,0 +1,9 @@
+# Stop after how many blocks.
+chain_blocks: 1000000
+
+# The real interval between each step.
+# For a better experience of debugging.
+step_interval: 10
+
+# The mean of block interval.
+block_interval: 8000

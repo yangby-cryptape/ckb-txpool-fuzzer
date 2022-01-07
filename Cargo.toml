@@ -1,0 +1,48 @@
+[package]
+name = "ckb-txpool-fuzzer"
+version = "0.1.0-alpha.0"
+authors = ["Boyu Yang <yangby@cryptape.com>"]
+edition = "2021"
+license = "MIT"
+description = "A tool to submit random data to CKB transactions pool."
+homepage = "https://github.com/yangby-cryptape/ckb-txpool-fuzzer"
+repository = "https://github.com/yangby-cryptape/ckb-txpool-fuzzer"
+
+[dependencies]
+ckb-tx-pool             = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b", features = ["with_mocked_components"] }
+ckb-verification        = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b", features = ["mock"] }
+ckb-script              = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b", features = ["mock"] }
+ckb-verification-traits = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-chain-spec          = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-resource            = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-pow                 = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-store               = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-db                  = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-db-schema           = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-network             = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-crypto              = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-types               = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-dao-utils           = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-proposal-table      = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-snapshot            = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-channel             = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-stop-handler        = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-async-runtime       = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-app-config          = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-test-chain-utils    = { git =  "https://github.com/yangby-cryptape/ckb", rev = "352427b" }
+ckb-system-scripts = { version = "= 0.5.4"  }
+rocksdb = { package = "ckb-rocksdb", version ="=0.16.1", features = ["snappy"] }
+anyhow = "1.0.51"
+thiserror = "1.0.30"
+log = "0.4.14"
+env_logger = "0.9.0"
+clap = { version = "2.34.0", features = ["yaml"]  }
+rand = "0.8.4"
+rand_distr = "0.4.2"
+faketime = "0.2.1"
+serde = { version = "1.0.131", features = ["derive"] }
+serde_yaml = "0.8.23"
+path-clean = "0.1.0"
+tempfile = "3.1.0"
+indexmap = "1.8.0"
+ctrlc = { version = "3.2.1", features = ["termination"] }
