@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+currdir="$(pwd)"
+
+test_id=$(date +"fuzz-%Y%m%d-%H%M%S")
+datadir="${currdir}/data"
+logsdir="${currdir}/logs"
+
+repo_dir="${currdir}/repo"
+repo_giturl="https://github.com/yangby-cryptape/ckb-txpool-fuzzer.git"
+repo_branch="deployed"
+
+rust_backtrace="full"
+rust_log="info,ckb_txpool_fuzzer=trace,ckb-script=trace,ckb-txpool=trace"
+
+fuzzer="target/debug/ckb-txpool-fuzzer"
+conf_dir="configs"
+logfile="run.log"
+
+sentry_tag="fuzz-type:txpool"
+version="unknown"
+exit_code=250
+
+export RUST_BACKTRACE=full
+
+# Set SENTRY_DSN
+source "${0}.env"
+
+function log () {
+    printf "[$(date +"%Y-%m-%d %H:%M:%S")] >>> "
+    echo "$@"
+}
+
+function title () {
+    local line=">>>>    >>>>    >>>>    >>>>    >>>>    >>>>    >>>>    >>>>    >>>>    >>>>"
+    echo "${line}"
+    echo
+    printf "[$(date +"%Y-%m-%d %H:%M:%S")] *** "
+    echo -n "$@"
+    printf " ***"
+    echo
+    echo
+    echo "${line}"
+}
+
+function exit_func () {
+    set +euo pipefail
+    local level="error"
+    local message="Failure: TxPool Fuzz Tests Failed"
+    tail -n 50 "${logfile}" > "${logfile}.tmp"
+    if [ "${exit_code}" -ne 0 ]; then
+        if [ ! -d "${logsdir}" ]; then
+            mkdir -p "${logsdir}"
+        fi
+        cd "${repo_dir}"
+        7z a -t7z "${test_id}-log.7z" "${logfile}"
+        mv "${test_id}-log.7z" "${logsdir}/"
+        tar -cf "${test_id}-data.tar" "${datadir}"
+        mv "${test_id}-data.tar" "${logsdir}/"
+        rm -rf "${datadir}"
+    else
+        level="info"
+        message="Success: TxPool Fuzz Tests Passed"
+    fi
+    sentry-cli send-event \
+        --level "${level}" \
+        --release "${version}" \
+        --message "${message}" \
+        --tag "${sentry_tag}" \
+        --user "test-id:${test_id}" \
+        --logfile "${logfile}.tmp"
+}
+
+trap exit_func EXIT
+
+function main () {
+    title "Starting TxPool Fuzz Tests"
+
+    if [ ! -d "${repo_dir}" ]; then
+        log "Clone the Fuzzer repository ..."
+        git clone "${repo_giturl}" "${repo_dir}"
+        cd "${repo_dir}"
+    else
+        log "Update the Fuzzer repository ..."
+        cd "${repo_dir}"
+        git fetch origin
+    fi
+    git reset --hard
+    git checkout "origin/${repo_branch}"
+    version=$(git rev-parse "origin/${repo_branch}" | cut -c -7)
+
+    log "Build the Fuzzer ..."
+    source "${HOME}/.cargo/env"
+    cargo build
+
+    log "Run TxPool Fuzz Tests ..."
+    rm -f "${logfile}" "${logfile}.tmp"
+    if [ ! -d "${datadir}" ]; then
+        RUST_BACKTRACE="${rust_backtrace}" RUST_LOG="${rust_log}" \
+            "${fuzzer}" init \
+                --config-file "${conf_dir}/init.yaml.sample" \
+                --data-dir "${datadir}" 2>&1 \
+            | tee "${logfile}"
+    fi
+    RUST_BACKTRACE="${rust_backtrace}" RUST_LOG="${rust_log}" \
+        "${fuzzer}" run \
+            --config-file "${conf_dir}/run.yaml.sample" \
+            --data-dir "${datadir}" 2>&1 \
+        | tee "${logfile}"
+    exit_code="${PIPESTATUS[0]}"
+
+    title "Finished TxPool Fuzz Tests"
+    exit "${exit_code}"
+}
+
+main "$@"
